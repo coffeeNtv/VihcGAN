@@ -1,0 +1,35 @@
+from .base_options import BaseOptions
+
+
+class TrainOptions(BaseOptions):
+    def initialize(self):
+        BaseOptions.initialize(self)
+        self.parser.add_argument('--display_freq', type=int, default=100, help='frequency of showing training results on screen')
+        self.parser.add_argument('--display_single_pane_ncols', type=int, default=0, help='if positive, display all images in a single visdom web panel with certain number of images per row.')
+        self.parser.add_argument('--update_html_freq', type=int, default=1000, help='frequency of saving training results to html')
+        self.parser.add_argument('--print_freq', type=int, default=50, help='frequency of showing training results on console')
+        self.parser.add_argument('--save_latest_freq', type=int, default=100, help='frequency of saving the latest results')
+        self.parser.add_argument('--save_epoch_freq', type=int, default=20, help='frequency of saving checkpoints at the end of epochs')
+        self.parser.add_argument('--continue_train', action='store_true', help='continue training: load the latest model')
+        self.parser.add_argument('--epoch_count', type=int, default=1, help='the starting epoch count, we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>, ...')
+        self.parser.add_argument('--phase', type=str, default='train', help='train, val, test, etc')
+        self.parser.add_argument('--which_epoch', type=str, default='latest', help='which epoch to load? set to latest to use latest cached model')
+        self.parser.add_argument('--niter', type=int, default=100, help='# of iter at starting learning rate')
+        self.parser.add_argument('--niter_decay', type=int, default=100, help='# of iter to linearly decay learning rate to zero')
+        self.parser.add_argument('--beta1', type=float, default=0.5, help='momentum term of adam')
+        self.parser.add_argument('--lr', type=float, default=0.0002, help='initial learning rate for adam')
+        self.parser.add_argument('--trans_lr_coef', type=float, default=1, help='initial learning rate for adam')
+        self.parser.add_argument('--no_lsgan', action='store_true', help='do *not* use least square GAN, if false, use vanilla GAN')
+        self.parser.add_argument('--pool_size', type=int, default=0, help='the size of image buffer that stores previously generated images')
+        self.parser.add_argument('--no_html', action='store_true', help='do not save intermediate training results to [opt.checkpoints_dir]/[opt.name]/web/')
+        self.parser.add_argument('--lr_policy', type=str, default='lambda', help='learning rate policy: lambda|step|plateau')
+        self.parser.add_argument('--lr_decay_iters', type=int, default=50, help='multiply by a gamma every lr_decay_iters iterations')
+        self.parser.add_argument('--no_vgg_loss', action='store_true', help='if specified, do *not* use VGG feature matching loss')      
+        self.parser.add_argument('--num_D', type=int, default=2, help='number of discriminators to use')  
+        self.parser.add_argument('--lambda_feat', type=float, default=10.0, help='weight for feature matching loss')  
+        self.parser.add_argument('--lambda_vgg', type=float, default=10.0, help='weight for vgg loss')
+        self.parser.add_argument('--vgg_layer', type=float, default=2, help='layer of vgg for perc loss')
+        self.parser.add_argument('--lambda_adv', type=float, default=1.0, help='weight for adversarial loss')
+        self.parser.add_argument('--no_ganFeat_loss', action='store_true', help='do not use GAN matching loss if assigned')
+        self.parser.add_argument('--train_res', type=str, default='./train_results/', help='saves training results here.')
+        self.isTrain = True
